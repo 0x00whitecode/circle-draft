@@ -147,7 +147,7 @@ const handleNextStep2 = () => {
         </div>
 
         {/* Step 1 */}
-        {step === 5 && (
+        {step === 1 && (
           <>
             <Input label="Full Name" value={formData.fullName} onChange={handleInputChange("fullName")} />
 
@@ -336,7 +336,7 @@ const handleNextStep2 = () => {
 
         )}
 
-        {step === 1 && (
+        {step === 5 && (
           <div className="">
             <CaptureImage />
             </div>
