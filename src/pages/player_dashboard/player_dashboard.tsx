@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ConnectButton } from "thirdweb/react";
-import { useActiveAccount, useDisconnect } from "thirdweb/react";
+import { useActiveAccount } from "thirdweb/react";
 import { createThirdwebClient } from "thirdweb";
 import Loader from "../../assets/img/loading.gif";
 import logo from "../../assets/img/CircleDraft.png";
@@ -17,10 +17,9 @@ export const client = createThirdwebClient({
 
 function Dashboard() {
   const account = useActiveAccount();
-  const disconnect = useDisconnect();
   const navigate = useNavigate();
-  const [balance, setBalance] = useState(null);
-  const [isGatedContentVisible, setIsGatedContentVisible] = useState(false);
+
+
   const [loading, setLoading] = useState(true); // loading state
 
   // Redirect to home if not logged in
@@ -35,26 +34,7 @@ function Dashboard() {
   }, [navigate, account]);
 
   // Fetch wallet balance and check if the user has enough $TWCOIN
-  useEffect(() => {
-    const fetchBalance = async () => {
-      if (account) {
-        try {
-          const bal = await client.getBalance({
-            address: account.address,
-          });
-          setBalance(bal.displayValue);
-
-          // Assuming a function that checks if the user has more than 10 $TWCOIN
-          if (parseFloat(bal.displayValue) > 10) {
-            setIsGatedContentVisible(true);
-          }
-        } catch (error) {
-          console.error("Error fetching balance:", error);
-        }
-      }
-    };
-    fetchBalance();
-  }, [account]);
+  
 
   return (
     <div className="min-h-screen flex flex-col ">

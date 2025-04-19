@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useActiveAccount } from "thirdweb/react";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children }:any) => {
   const account = useActiveAccount();
   const navigate = useNavigate();
 

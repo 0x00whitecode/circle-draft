@@ -1,31 +1,46 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // 👈 added for navigation
+
+// Define the Images type with null or string values
+type Images = {
+  [key: string]: string | null;
+  front: string | null;
+  right: string | null;
+  back: string | null;
+  left: string | null;
+};
 
 function CaptureImage() {
   const navigate = useNavigate(); // 👈 initialize navigate
-  const [images, setImages] = useState({
+
+  const [isLoading, setIsLoading] = useState(false); // 👈 loading state
+
+  // Initialize images state
+  const [images, setImages] = useState<Images>({
     front: null,
     right: null,
     back: null,
     left: null,
   });
 
-  const [isLoading, setIsLoading] = useState(false); // 👈 loading state
-
   // Load from localStorage on mount
   useEffect(() => {
-    const savedImages = JSON.parse(localStorage.getItem("uploadedImages"));
+    const savedImages = localStorage.getItem("uploadedImages");
     if (savedImages) {
-      setImages(savedImages);
+      setImages(JSON.parse(savedImages));
     }
   }, []);
 
-  const handleImageUpload = (event, view) => {
+  // Check if all images are uploaded
+  const allImagesUploaded = Object.values(images).every((image) => image !== null);
+
+  // Handle image upload
+  const handleImageUpload = (event: any, view: keyof Images) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64Image = reader.result;
+        const base64Image = reader.result as string; // Typecast the result as string
         const updatedImages = { ...images, [view]: base64Image };
         setImages(updatedImages);
         localStorage.setItem("uploadedImages", JSON.stringify(updatedImages));
@@ -40,8 +55,6 @@ function CaptureImage() {
     { key: "back", label: "Back View" },
     { key: "left", label: "Left View" },
   ];
-
-  const allImagesUploaded = Object.values(images).every((image) => image !== null);
 
   const handleSubmit = () => {
     setIsLoading(true);
@@ -68,7 +81,7 @@ function CaptureImage() {
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleImageUpload(e, view.key)}
+                onChange={(e) => handleImageUpload(e, view.key as keyof Images)} // Corrected
                 className="hidden"
               />
             </label>
@@ -84,8 +97,8 @@ function CaptureImage() {
             >
               {images[view.key] ? (
                 <img
-                  src={images[view.key]}
-                  alt={`${view.label}`}
+                  src={images[view.key]!}  // Non-null assertion because we know it's not null after the check
+                  alt={view.label}
                   className="object-cover w-full h-full"
                 />
               ) : (
@@ -106,7 +119,7 @@ function CaptureImage() {
           disabled={isLoading}
           className={`mt--1 flex items-center justify-center gap-2 ${
             isLoading ? "bg-gray-300" : "bg-orange-400 hover:ring-2 ring-amber-800 hover:bg-slate-300 hover:text-orange-700"
-          } cursor-pointer text-white font-bold py-3 px-4 rounded-sm  transition-all duration-200`}
+          } cursor-pointer text-white font-bold py-3 px-4 rounded-sm transition-all duration-200`}
         >
           {isLoading ? (
             <>

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import half_man from "../../assets/img/guig-removebg-preview 1.png";
 import spin_ball from "../../assets/img/bin-6550_256.gif";
 import logo from "../../assets/img/CircleDraft.png";
@@ -15,7 +14,7 @@ const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i
 const days = Array.from({ length: 31 }, (_, i) => i + 1);
 const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
-const ProgressStep = ({ step, current }) => (
+const ProgressStep = ({ step, current }:any) => (
   <div
     className={`w-10 h-10 rounded-full ${
       step >= current ? "bg-[#81A2FF]" : "bg-[#f4f5f6]"
@@ -28,7 +27,7 @@ const ProgressStep = ({ step, current }) => (
 );
 
 export default function CircleDraftForm() {
-  const navigate = useNavigate();
+ 
   const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
@@ -55,7 +54,7 @@ export default function CircleDraftForm() {
 
   const [error, setError] = useState("");
 
-  const showError = (message) => {
+  const showError = (message:any) => {
     setError(message);
     setTimeout(() => setError(""), 3000);
   };
@@ -65,9 +64,10 @@ const handlePreviousStep = () => {
 };
 
 
-  const handleInputChange = (field) => (e) => {
-    setFormData({ ...formData, [field]: e.target.value });
-  };
+const handleInputChange = (field: any) => (e: any): void => {
+  setFormData({ ...formData, [field]: e.target.value });
+};
+
 
   const handleNextStep1 = () => {
     const { fullName, dobDay, dobMonth, dobYear, nationality, email } = formData;
@@ -352,8 +352,14 @@ const handleNextStep2 = () => {
     </div>
   );
 }
+type InputProps = {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: string;
+};
 
-function Input({ label, value, onChange, type = "text" }) {
+function Input({ label, value, onChange, type = "text" }: InputProps) {
   return (
     <div className="mb-4">
       <label className="block text-gray-700 text-sm font-bold mb-2">{label}</label>
@@ -367,7 +373,7 @@ function Input({ label, value, onChange, type = "text" }) {
   );
 }
 
-function Select({ options, value, onChange, placeholder }) {
+function Select({ options, value, onChange, placeholder }:any ) {
   return (
     <select
       value={value}
@@ -375,11 +381,13 @@ function Select({ options, value, onChange, placeholder }) {
       className="border rounded px-2 py-2 w-1/3"
     >
       <option value="">{placeholder}</option>
-      {options.map((opt) => (
-        <option key={opt} value={opt}>
-          {opt}
-        </option>
-      ))}
+{options.map((opt: string) => (
+  <option key={opt} value={opt}>
+    {opt}
+  </option>
+))}
+
+      
     </select>
   );
 }

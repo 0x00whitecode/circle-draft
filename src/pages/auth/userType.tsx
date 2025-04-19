@@ -2,7 +2,6 @@
 
 import { useNavigate } from "react-router-dom";
 import login_display from "../../assets/img/Group33.png";
-import logo from "../../assets/img/CircleDraft.png";
 import logo_display from "../../assets/img/CircleDraft_one.png";
 
 

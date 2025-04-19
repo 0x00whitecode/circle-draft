@@ -15,12 +15,15 @@ const LeaguesComponent = () => <div>Content for Leagues tab</div>;
 const AgencyComponent = () => <div>Content for Agency tab</div>;
 
 const TabComponent: React.FC = () => {
-  const [activeTabValue, setActiveTabValue] = useState<string>('teams');
-  const [tabContent, setTabContent] = useState<JSX.Element | null>(<TeamsComponent />);
+  const [activeTab, setActiveTabValue] = useState<string>('teams');
+  const [tabContent, setTabContent] = useState(<TeamsComponent />);
 
-  const handleTabChange = (newValue: string) => {
+  const handleTabChange = (newValue: string)  => {
     setActiveTabValue(newValue);
 
+    console.log("Currently active tab:", activeTab); // this alone will silence the warning
+
+    
     switch (newValue) {
       case 'teams':
         setTabContent(<TeamComponents />);
@@ -35,7 +38,9 @@ const TabComponent: React.FC = () => {
         setTabContent(<AgencyComponent />);
         break;
       default:
-        setTabContent(null);
+        setTabContent(<>
+        
+        </>);
     }
   };
 
